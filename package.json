@@ -1,0 +1,12 @@
+{
+  "name": "thesaurize",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "snoostorm": "0.0.5",
+    "snoowrap": "^1.15.2"
+  }
+}
