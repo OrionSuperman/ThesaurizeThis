@@ -6,7 +6,9 @@
     "start": "node app.js"
   },
   "dependencies": {
+    "dotenv": "^6.1.0",
     "snoostorm": "0.0.5",
-    "snoowrap": "^1.15.2"
+    "snoowrap": "^1.15.2",
+    "thesaurus": "0.0.0"
   }
 }
