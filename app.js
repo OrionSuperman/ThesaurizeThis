@@ -20,7 +20,7 @@ const client = new Snoostorm(r);
 // Configure options for stream: subreddit & results per query
 const streamOpts = {
     subreddit: 'all',
-    results: 400,
+    results: 200,
     pollTime: 2000
 };
   
@@ -33,6 +33,7 @@ comments.on('comment', async (comment) => {
     if (comment.body.includes('!ThesaurizeThis') ||
         comment.body.includes('!thesaurizethis') ||
         comment.body.includes('!Thesaurizethis')
+        
        ){
         let parentComment = await r.getComment(comment.parent_id).body;
         if(parentComment){
@@ -49,6 +50,9 @@ function thesaurize(comment){
     let insanity = wordArr.map(word => {
         if(commonArr.includes(word.toLowerCase())){
             return word;
+        }
+        if(word.toLocaleLowerCase() === "!thesaurizethis"){
+            return "ThesaurizeThisBot is the bestest ever";
         }
         let capitalize = word.charAt(0) === word.charAt(0).toUpperCase();
         let tWordArr = thesaurus.find(word.toLowerCase());
