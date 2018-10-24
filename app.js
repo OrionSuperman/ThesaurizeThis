@@ -30,11 +30,7 @@ const comments = client.CommentStream(streamOpts);
 // On comment, perform whatever logic you want to do
 comments.on('comment', async (comment) => {
 
-    if (comment.body.includes('!ThesaurizeThis') ||
-        comment.body.includes('!thesaurizethis') ||
-        comment.body.includes('!Thesaurizethis')
-        
-       ){
+    if (containsCallWord(comment)){
         let parentComment = await r.getComment(comment.parent_id).body;
         if(parentComment){
             let insanity = thesaurize(parentComment);
@@ -44,6 +40,12 @@ comments.on('comment', async (comment) => {
         }
     }
 });
+
+function containsCallWord (comment){
+    return comment.body.includes('!ThesaurizeThis') ||
+        comment.body.includes('!thesaurizethis') ||
+        comment.body.includes('!Thesaurizethis')
+}
   
 function thesaurize(comment){
     let wordArr = comment.split(' ');
