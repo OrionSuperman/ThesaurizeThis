@@ -21,7 +21,7 @@ const client = new Snoostorm(r);
 const streamOpts = {
     subreddit: 'all',
     results: 200,
-    pollTime: 2000
+    pollTime: 2500
 };
   
 // Create a Snoostorm CommentStream with the specified options
@@ -33,18 +33,30 @@ comments.on('comment', async (comment) => {
     if (containsCallWord(comment)){
         let parentComment = await r.getComment(comment.parent_id).body;
         if(parentComment){
+            parentComment = parentComment.split(`
+***
+`)[0];
             let insanity = thesaurize(parentComment);
             console.log("~~~~~~~~~~~~~");
             console.log(insanity);
-            comment.reply(insanity);
+            comment.reply(insanity + subScript());
         }
     }
 });
 
+function subScript (){ // this doesn't work as chains of alterations keep adding this. Maybe find this in the original message and slice it out?
+    return `
+
+***
+
+^(This is a bot. I try my best, but my best is 80% mediocrity 20% hilarity. Created by OrionSuperman. Check out my best work at /r/ThesaurizeThis)`;
+}
+
 function containsCallWord (comment){
     return comment.body.includes('!ThesaurizeThis') ||
         comment.body.includes('!thesaurizethis') ||
-        comment.body.includes('!Thesaurizethis')
+        comment.body.includes('!Thesaurizethis') ||
+        comment.body.includes('!FuckMyShitUpFam')
 }
   
 function thesaurize(comment){
@@ -57,10 +69,10 @@ function thesaurize(comment){
         if(commonArr.includes(word.toLowerCase())){
             return word + punctuation;
         }
-        if(word.toLocaleLowerCase() === "!thesaurizethis"){
+        if(word.toLocaleLowerCase().includes("!thesaurizethis")){
             return "ThesaurizeThisBot is the bestest ever";
         }
-        if(word.toLocaleLowerCase() === "trump"){
+        if(word.toLocaleLowerCase() === "trump" || word.toLocaleLowerCase() === "trump's"){
             return trump() + punctuation;
         }
         let capitalize = word.charAt(0) === word.charAt(0).toUpperCase();
@@ -79,9 +91,9 @@ function splitPunctuation(word){
         word,
         punctuation: ""
     };
-    if(!isLetter(word[word.length -1])){
-        returnObj.word = word.substring(0, word.length-1);
-        returnObj.punctuation = word.substring(word.length-1);
+    while(!isLetter(returnObj.word[returnObj.word.length -1]) && returnObj.word.length){
+        returnObj.punctuation = returnObj.word.substring(returnObj.word.length-1) + returnObj.punctuation;
+        returnObj.word = returnObj.word.substring(0, returnObj.word.length-1);
     }
     
     return returnObj;
@@ -92,7 +104,7 @@ function chooseWord(tWordArr){
 }
 
 function isLetter(c) {
-  return c.toLowerCase() != c.toUpperCase();
+  return c ? c.toLowerCase() != c.toUpperCase() : true;
 }
 
 function jsUcfirst(string) {
@@ -102,7 +114,6 @@ function jsUcfirst(string) {
 function trump() {
     let trumpNames = `Agent of Deranged Change
 The Angry Cheeto
-Antichrist
 Bag of Toxic Sludge
 Bald-faced Crier
 The Bigoted Billionaire
@@ -126,9 +137,6 @@ Crown Prince of Politwits
 Crybaby Prima Donald
 The Daft Draft Dodger
 Dainty Donald
-Damien Trump
-Darth Hater
-DDT
 The Debate Hater
 Deeply Disturbed Fuzzy Orange Goofball
 Der Groepenfuehrer
@@ -139,9 +147,7 @@ Dingbat Donald
 Dishonest Don
 The Disruptor
 The Dick Tater
-DJT
 Dodgy Donald
-The Don
 Don the Con
 Don Dementia
 Donald Chump
