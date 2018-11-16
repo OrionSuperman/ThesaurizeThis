@@ -60,6 +60,9 @@ function containsCallWord (comment){
 function thesaurize(comment){
     let wordArr = comment.split(' ');
     let insanity = wordArr.map(word => {
+        if(word.toLocaleLowerCase().includes("!thesaurizethis")){
+            return "ThesaurizeThisBot is the bestest ever";
+        }
         let punctuation;
         let isPlural;
         let split = splitPunctuation(word);
@@ -75,9 +78,7 @@ function thesaurize(comment){
         if(commonArr.includes(word.toLowerCase())){
             return constructWord(word, punctuation);
         }
-        if(word.toLocaleLowerCase().includes("!thesaurizethis")){
-            return "ThesaurizeThisBot is the bestest ever";
-        }
+        
         if(word.toLocaleLowerCase() === "trump" || word.toLocaleLowerCase() === "trump's"){
             return constructWord(trump(), punctuation, false, capitalize, allCaps);
         }
