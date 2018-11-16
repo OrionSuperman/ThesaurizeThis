@@ -3,6 +3,7 @@ require('dotenv').config();
 const Snoowrap = require('snoowrap');
 const Snoostorm = require('snoostorm');
 const thesaurus = require('thesaurus');
+const pluralize = require('pluralize');
 
 const commonArr =["the","of","and","a","to","in","is","you","that","it","he","was","for","on","are","as","with","his","they","I","at","be","this","have","from","or","one","had","by","word","but","not","what","all","were","we","when","your","can","said","there","use","an","each","which","she","do","how","their","if","will","up","other","about","out","many","then","them","these","so","some","her","would","make","like","him","into","time","has","look","two","more","write","go","see","number","no","way","could","people","my","than","first","water","been","call","who","oil","its","now","find","long","down","day","did","get","come","made","may","part","i","me"];
 
@@ -53,47 +54,73 @@ function subScript (){ // this doesn't work as chains of alterations keep adding
 }
 
 function containsCallWord (comment){
-    return comment.body.includes('!ThesaurizeThis') ||
-        comment.body.includes('!thesaurizethis') ||
-        comment.body.includes('!Thesaurizethis') ||
-        comment.body.includes('!FuckMyShitUpFam')
+    return comment.body.toLowerCase().includes('!thesaurizethis');
 }
   
 function thesaurize(comment){
     let wordArr = comment.split(' ');
     let insanity = wordArr.map(word => {
         let punctuation;
+        let isPlural;
         let split = splitPunctuation(word);
         word = split.word;
         punctuation = split.punctuation;
+        let capitalize = word.charAt(0) === word.charAt(0).toUpperCase();
+        let allCaps = word === word.toUpperCase();
+        if(pluralize.isPlural(word)){
+            isPlural = true;
+            word = pluralize.singular(word.toLowerCase());
+        }
+        
         if(commonArr.includes(word.toLowerCase())){
-            return word + punctuation;
+            return constructWord(word, punctuation);
         }
         if(word.toLocaleLowerCase().includes("!thesaurizethis")){
             return "ThesaurizeThisBot is the bestest ever";
         }
         if(word.toLocaleLowerCase() === "trump" || word.toLocaleLowerCase() === "trump's"){
-            return trump() + punctuation;
+            return constructWord(trump(), punctuation, false, capitalize, allCaps);
         }
-        let capitalize = word.charAt(0) === word.charAt(0).toUpperCase();
-        let tWordArr = thesaurus.find(word.toLowerCase());
-        let tWord = chooseWord(tWordArr);
-        let returnWord = tWord ? tWord : word;
-        returnWord = capitalize ? jsUcfirst(returnWord) : returnWord;
-        return returnWord + punctuation;
+        
+        let returnWord = getThesaurusWord(word);
+        
+        return constructWord(returnWord, punctuation, isPlural, capitalize, allCaps);
     });
     
     return insanity.join(' ');
 }
 
+function getThesaurusWord(word){
+    let tWordArr = thesaurus.find(word.toLowerCase());
+    let tWord = chooseWord(tWordArr);
+    return tWord ? tWord : word;
+}
+
+function constructWord(word, punctuation, isPlural, capitalize, allCaps){
+    if(isPlural){
+        word = pluralize.plural(word);
+    }
+    if(allCaps){
+        word = word.toUpperCase();
+    } else if(capitalize){
+        word = jsUcfirst(word);
+    }
+    return punctuation[0] + word + punctuation[1];
+}
+
 function splitPunctuation(word){
     let returnObj = {
         word,
-        punctuation: ""
+        punctuation: ["",""]
     };
     while(!isLetter(returnObj.word[returnObj.word.length -1]) && returnObj.word.length){
-        returnObj.punctuation = returnObj.word.substring(returnObj.word.length-1) + returnObj.punctuation;
+        returnObj.punctuation[1] = returnObj.word.substring(returnObj.word.length-1) + returnObj.punctuation[1];
         returnObj.word = returnObj.word.substring(0, returnObj.word.length-1);
+    }
+    
+    while(!isLetter(returnObj.word[0]) && returnObj.word.length){
+        returnObj.punctuation[0] = returnObj.punctuation[0] + returnObj.word.substring(0,1);
+        returnObj.word = returnObj.word.substring(1);
     }
     
     return returnObj;

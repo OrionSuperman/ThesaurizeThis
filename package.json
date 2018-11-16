@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "dotenv": "^6.1.0",
+    "pluralize": "^7.0.0",
     "snoostorm": "0.0.5",
     "snoowrap": "^1.15.2",
     "thesaurus": "0.0.0"
