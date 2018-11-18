@@ -5,6 +5,7 @@ const Snoostorm = require('snoostorm');
 const thesaurus = require('thesaurus');
 const pluralize = require('pluralize');
 
+const callWord = "!thesaurizethis";
 const commonArr =["the","of","and","a","to","in","is","you","that","it","he","was","for","on","are","as","with","his","they","I","at","be","this","have","from","or","one","had","by","word","but","not","what","all","were","we","when","your","can","said","there","use","an","each","which","she","do","how","their","if","will","up","other","about","out","many","then","them","these","so","some","her","would","make","like","him","into","time","has","look","two","more","write","go","see","number","no","way","could","people","my","than","first","water","been","call","who","oil","its","now","find","long","down","day","did","get","come","made","may","part","i","me"];
 
 
@@ -34,33 +35,31 @@ comments.on('comment', async (comment) => {
     if (containsCallWord(comment)){
         let parentComment = await r.getComment(comment.parent_id).body;
         if(parentComment){
-            parentComment = parentComment.split(`
-***
-`)[0];
+            parentComment = parentComment.split(subScript())[0];
             let insanity = thesaurize(parentComment);
             console.log("~~~~~~~~~~~~~");
+            console.log(comment.subreddit_name_prefixed);
             console.log(insanity);
-            comment.reply(insanity + subScript());
+            if(inBannedSub(comment.subreddit_name_prefixed)){
+                bannedReply(insanity, comment.link_author, comment.subreddit_name_prefixed, comment.link_url);
+            } else {
+                comment.reply(insanity + subScript());
+            }
+            
         }
     }
 });
 
-function subScript (){ // this doesn't work as chains of alterations keep adding this. Maybe find this in the original message and slice it out?
-    return `
 
-***
-
-^(This is a bot. I try my best, but my best is 80% mediocrity 20% hilarity. Created by OrionSuperman. Check out my best work at /r/ThesaurizeThis)`;
-}
 
 function containsCallWord (comment){
-    return comment.body.toLowerCase().includes('!thesaurizethis');
+    return comment.body.toLowerCase().includes(callWord);
 }
   
 function thesaurize(comment){
     let wordArr = comment.split(' ');
     let insanity = wordArr.map(word => {
-        if(word.toLocaleLowerCase().includes("!thesaurizethis")){
+        if(word.toLocaleLowerCase().includes(callWord)){
             return "ThesaurizeThisBot is the bestest ever";
         }
         let punctuation;
@@ -88,7 +87,8 @@ function thesaurize(comment){
         return constructWord(returnWord, punctuation, isPlural, capitalize, allCaps);
     });
     
-    return insanity.join(' ');
+    insanity = insanity.join(' ');
+    return trimLongComment(insanity);
 }
 
 function getThesaurusWord(word){
@@ -127,6 +127,14 @@ function splitPunctuation(word){
     return returnObj;
 }
 
+function subScript (){
+    return `
+
+***
+
+^(This is a bot. I try my best, but my best is 80% mediocrity 20% hilarity. Created by OrionSuperman. Check out my best work at /r/ThesaurizeThis)`;
+}
+
 function chooseWord(tWordArr){
     return tWordArr.length ? tWordArr[Math.floor(Math.random()*tWordArr.length)] : false;
 }
@@ -137,6 +145,58 @@ function isLetter(c) {
 
 function jsUcfirst(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function inBannedSub(subName){
+    let bannedSubs = [
+        "r/politics",
+        "r/gaming",
+        "r/askreddit",
+        "r/furry",
+        "r/memes",
+        "r/dankmemes",
+        "r/blackpeopletwitter",
+        "r/programmerhumor",
+        "r/worldbuilding",
+        "r/onewordban",
+        "r/creepypms",
+        "r/politicalhumor",
+        "r/circlejerk",
+        "r/emojipasta",
+        "r/peoplefuckingdying",
+        "r/sex",
+        "r/legaladvice",
+        "r/writingprompts",
+        "r/explainlikeimfive",
+        "r/competitiveoverwatch",
+        "r/wtf",
+        "r/talesfromtechsupport",
+        "r/youtubehaiku",
+        "r/magictcg",
+        "r/mma",
+        "r/wholesomememes",
+        "r/nfl",
+        "r/chapotraphouse",
+        "r/rainbow6",
+        "r/casualuk",
+        "r/walkingwarrobots",
+        "r/dogswithjobs",
+        "r/todayilearned"
+    ];
+    
+    return bannedSubs.includes(subName.toLowerCase());
+}
+
+function bannedReply(insanity, user, subreddit, commentLink){
+    let appendedResponse = `Paging u/${user}. [You called](${commentLink}), unfortunately I am banned in ${subreddit} so here is your translated text: \n\n ${insanity}`;
+    r.getSubmission('9y3efk').reply(appendedResponse + subScript());
+}
+
+function trimLongComment(comment){
+    if(comment.length > 9500){
+        comment = comment.substring(0,9500);
+    }
+    return comment;
 }
 
 function trump() {
