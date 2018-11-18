@@ -32,7 +32,7 @@ const comments = client.CommentStream(streamOpts);
 // On comment, perform whatever logic you want to do
 comments.on('comment', async (comment) => {
 
-    if (containsCallWord(comment) || comment.subreddit_name_prefixed === "r/ThesaurizeThis"){
+    if (containsCallWord(comment) || (comment.subreddit_name_prefixed === "r/ThesaurizeThis" && comment.author.name !== "ThesaurizeThisBot")){
         let parentComment = await r.getComment(comment.parent_id).body;
         if(parentComment){
             parentComment = parentComment.split(subScript())[0];
