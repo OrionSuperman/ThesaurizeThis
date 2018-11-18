@@ -41,7 +41,7 @@ comments.on('comment', async (comment) => {
             console.log(comment.subreddit_name_prefixed);
             console.log(insanity);
             if(inBannedSub(comment.subreddit_name_prefixed)){
-                bannedReply(insanity, comment.link_author, comment.subreddit_name_prefixed, comment.link_url);
+                bannedReply(insanity, comment.author.name, comment.subreddit_name_prefixed, comment.link_url);
             } else {
                 comment.reply(insanity + subScript());
             }
