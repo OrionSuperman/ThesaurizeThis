@@ -51,7 +51,7 @@ function processComment(comment, parentComment){
     console.log(comment.subreddit_name_prefixed);
     console.log(insanity);
     if(inBannedSub(comment.subreddit_name_prefixed)){
-        bannedReply(insanity, comment.author.name, comment.subreddit_name_prefixed, comment.link_url);
+        bannedReply(insanity, comment.author.name, comment.subreddit_name_prefixed, comment.link_permalink);
     } else {
         comment.reply(insanity + subScript());
     }
