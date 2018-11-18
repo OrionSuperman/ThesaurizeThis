@@ -32,27 +32,32 @@ const comments = client.CommentStream(streamOpts);
 // On comment, perform whatever logic you want to do
 comments.on('comment', async (comment) => {
 
-    if (containsCallWord(comment) || (comment.subreddit_name_prefixed === "r/ThesaurizeThis" && comment.author.name !== "ThesaurizeThisBot")){
+    if (containsCallWord(comment)){
         let parentComment = await r.getComment(comment.parent_id).body;
         if(parentComment){
-            parentComment = parentComment.split(subScript())[0];
-            let insanity = thesaurize(parentComment);
-            console.log("~~~~~~~~~~~~~");
-            console.log(comment.subreddit_name_prefixed);
-            console.log(insanity);
-            if(inBannedSub(comment.subreddit_name_prefixed)){
-                bannedReply(insanity, comment.author.name, comment.subreddit_name_prefixed, comment.link_url);
-            } else {
-                comment.reply(insanity + subScript());
-            }
-            
+            processComment(comment, parentComment);
         }
+    
+    } else if(comment.subreddit_name_prefixed === "r/ThesaurizeThis" && comment.author.name !== "ThesaurizeThisBot"){
+        processComment(comment, false);
     }
 });
 
+function processComment(comment, parentComment){
+    let commentToProcess = parentComment ? parentComment : comment.body;
+    commentToProcess = commentToProcess.split(subScript())[0];
+    let insanity = thesaurize(commentToProcess);
+    console.log("~~~~~~~~~~~~~");
+    console.log(comment.subreddit_name_prefixed);
+    console.log(insanity);
+    if(inBannedSub(comment.subreddit_name_prefixed)){
+        bannedReply(insanity, comment.author.name, comment.subreddit_name_prefixed, comment.link_url);
+    } else {
+        comment.reply(insanity + subScript());
+    }
+}
 
-
-function containsCallWord (comment){
+function containsCallWord(comment){
     return comment.body.toLowerCase().includes(callWord);
 }
   
