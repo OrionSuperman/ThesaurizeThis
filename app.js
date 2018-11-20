@@ -70,7 +70,7 @@ function containsCallWord(comment, callWord){
 function thesaurize(comment){
     let wordArr = comment.split(' ');
     let insanity = wordArr.map(word => {
-        if(word.toLocaleLowerCase().includes(callWord)){
+        if(word.toLocaleLowerCase().includes(globalCallWord)){
             return "ThesaurizeThisBot is the bestest ever";
         }
         let punctuation;
