@@ -74,7 +74,7 @@ function thesaurize(comment){
         punctuation = split.punctuation;
         let capitalize = word.charAt(0) === word.charAt(0).toUpperCase();
         let allCaps = word === word.toUpperCase();
-        if(pluralize.isPlural(word)){
+        if(pluralize.isPlural(word) && !word.includes(`'s`)){
             isPlural = true;
             word = pluralize.singular(word.toLowerCase());
         }
@@ -189,7 +189,8 @@ function inBannedSub(subName){
         "r/todayilearned",
         "r/pcmasterrace",
         "r/fortnitebr",
-        "r/pics"
+        "r/pics",
+        "r/tattoos"
     ];
     
     return bannedSubs.includes(subName.toLowerCase());
