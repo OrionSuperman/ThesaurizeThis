@@ -5,7 +5,8 @@ const Snoostorm = require('snoostorm');
 const thesaurus = require('thesaurus');
 const pluralize = require('pluralize');
 
-const callWord = "!thesaurizethis";
+const globalCallWord = "!thesaurizethis";
+const fandango = "!dothefandango";
 const commonArr =["the","of","and","a","to","in","is","you","that","it","he","was","for","on","are","as","with","his","they","I","at","be","this","have","from","or","one","had","by","word","but","not","what","all","were","we","when","your","can","said","there","use","an","each","which","she","do","how","their","if","will","up","other","about","out","many","then","them","these","so","some","her","would","make","like","him","into","time","has","look","two","more","write","go","see","number","no","way","could","people","my","than","first","water","been","call","who","oil","its","now","find","long","down","day","did","get","come","made","may","part","i","me"];
 
 
@@ -32,7 +33,7 @@ const comments = client.CommentStream(streamOpts);
 // On comment, perform whatever logic you want to do
 comments.on('comment', async (comment) => {
 
-    if (containsCallWord(comment)){
+    if (containsCallWord(comment, globalCallWord)){
         let parentComment = await r.getComment(comment.parent_id).body;
         if(parentComment){
             processComment(comment, parentComment);
@@ -47,7 +48,7 @@ function processComment(comment, parentComment){
     let commentToProcess = parentComment ? parentComment : comment.body;
     commentToProcess = commentToProcess.split(subScript())[0];
     let insanity = thesaurize(commentToProcess);
-    if(comment.body.toLowerCase().contains("!dothefandango")){
+    if(containsCallWord(comment, fandango)){
         for(let i = 0; i < 20; i++){
             insanity = thesaurize(insanity);
         }
@@ -62,7 +63,7 @@ function processComment(comment, parentComment){
     }
 }
 
-function containsCallWord(comment){
+function containsCallWord(comment, callWord){
     return comment.body.toLowerCase().includes(callWord);
 }
   
