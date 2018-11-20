@@ -68,7 +68,7 @@ function thesaurize(comment){
             return "ThesaurizeThisBot is the bestest ever";
         }
         let punctuation;
-        let isPlural;
+        let isPlural = false;
         let split = splitPunctuation(word);
         word = split.word;
         punctuation = split.punctuation;
