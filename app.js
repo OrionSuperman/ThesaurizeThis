@@ -47,6 +47,11 @@ function processComment(comment, parentComment){
     let commentToProcess = parentComment ? parentComment : comment.body;
     commentToProcess = commentToProcess.split(subScript())[0];
     let insanity = thesaurize(commentToProcess);
+    if(comment.toLowerCase().contains("!dothefandango")){
+        for(let i = 0; i < 20; i++){
+            insanity = thesaurize(insanity);
+        }
+    }
     console.log("~~~~~~~~~~~~~");
     console.log(comment.subreddit_name_prefixed);
     console.log(insanity);
