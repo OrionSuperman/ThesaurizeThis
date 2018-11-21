@@ -196,7 +196,10 @@ function inBannedSub(subName){
         "r/pcmasterrace",
         "r/fortnitebr",
         "r/pics",
-        "r/tattoos"
+        "r/tattoos",
+        "r/aww",
+        "r/nottheonion",
+        "r/animalsbeingbros"
     ];
     
     return bannedSubs.includes(subName.toLowerCase());
