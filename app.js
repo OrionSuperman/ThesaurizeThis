@@ -202,7 +202,8 @@ function inBannedSub(subName){
         "r/animalsbeingbros",
         "r/jokes",
         "r/nascar",
-        "r/gamingcirclejerk"
+        "r/gamingcirclejerk",
+        "r/drugs"
     ];
     
     return bannedSubs.includes(subName.toLowerCase());
