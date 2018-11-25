@@ -49,7 +49,7 @@ function processComment(comment, parentComment){
     commentToProcess = commentToProcess.split(subScript())[0];
     let insanity = thesaurize(commentToProcess);
     if(containsCallWord(comment, fandango)){
-        for(let i = 0; i < 5; i++){
+        for(let i = 0; i < 10; i++){
             insanity = thesaurize(insanity);
         }
     }
