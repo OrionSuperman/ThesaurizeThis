@@ -205,7 +205,11 @@ function inBannedSub(subName){
         "r/gamingcirclejerk",
         "r/drugs",
         "r/pewdiepiesubmissions",
-        "r/fortnite"
+        "r/fortnite",
+        "r/murderedbywords",
+        "r/chibears",
+        "r/pointlessstories",
+        "r/codzombies"
     ];
     
     return bannedSubs.includes(subName.toLowerCase());
