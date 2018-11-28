@@ -209,7 +209,12 @@ function inBannedSub(subName){
         "r/murderedbywords",
         "r/chibears",
         "r/pointlessstories",
-        "r/codzombies"
+        "r/codzombies",
+        "r/baseball",
+        "r/army",
+        "r/leagueoflegends",
+        "r/blackops4",
+        "r/casualconversation"
     ];
     
     return bannedSubs.includes(subName.toLowerCase());
