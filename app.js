@@ -214,7 +214,11 @@ function inBannedSub(subName){
         "r/army",
         "r/leagueoflegends",
         "r/blackops4",
-        "r/casualconversation"
+        "r/casualconversation",
+        "r/creepyasterisks",
+        "r/pcgaming",
+        "r/gadgets",
+        
     ];
     
     return bannedSubs.includes(subName.toLowerCase());
