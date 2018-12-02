@@ -219,7 +219,14 @@ function inBannedSub(subName){
         "r/pcgaming",
         "r/gadgets",
         "r/warhammer",
-        "r/transcribersofreddit"
+        "r/transcribersofreddit",
+        "r/muse",
+        "r/mademesmile",
+        "r/lifeprotips",
+        "r/instant_regret",
+        "r/choosingbeggars",
+        "r/facepalm",
+        "r/learnprogramming"
     ];
     
     return bannedSubs.includes(subName.toLowerCase());
