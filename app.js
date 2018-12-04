@@ -5,10 +5,10 @@ const Snoostorm = require('snoostorm');
 const thesaurus = require('thesaurus');
 const pluralize = require('pluralize');
 
-const globalCallWord = "!thesaurizethis";
-const fandango = "!dothefandango";
+const globalCallWord = "!testthesaurizethis";
+const fandango = "!testdothefandango";
 const commonArr =["the","of","and","a","to","in","is","you","that","it","he","was","for","on","are","as","with","his","they","I","at","be","this","have","from","or","one","had","by","word","but","not","what","all","were","we","when","your","can","said","there","use","an","each","which","she","do","how","their","if","will","up","about","out","many","then","them","these","so","some","her","would","make","like","him","into","time","has","look","two","more","go","see","no","way","could","my","than","been","call","who","its","now","did","get","come","made","may","part","i","me","his"];
-
+const limitedPosts = {};
 
 // Build Snoowrap and Snoostorm clients
 const r = new Snoowrap({
@@ -33,8 +33,10 @@ const comments = client.CommentStream(streamOpts);
 // On comment, perform whatever logic you want to do
 comments.on('comment', async (comment) => {
 
-    if (containsCallWord(comment, globalCallWord)){
+    if (containsCallWord(comment, globalCallWord) || containsCallWord(comment, fandango)){
+//        console.log(comment);
         let parentComment = await r.getComment(comment.parent_id).body;
+        
         if(parentComment){
             processComment(comment, parentComment);
         }
@@ -46,7 +48,11 @@ comments.on('comment', async (comment) => {
 
 function processComment(comment, parentComment){
     let commentToProcess = parentComment ? parentComment : comment.body;
-    commentToProcess = commentToProcess.split(subScript())[0];
+    commentToProcess = commentToProcess.split(`
+
+***
+
+`)[0];
     let insanity = thesaurize(commentToProcess);
     if(containsCallWord(comment, fandango)){
         for(let i = 0; i < 10; i++){
@@ -57,7 +63,9 @@ function processComment(comment, parentComment){
     console.log(comment.subreddit_name_prefixed);
     console.log(insanity);
     if(inBannedSub(comment.subreddit_name_prefixed)){
-        bannedReply(insanity, comment.author.name, comment.subreddit_name_prefixed, comment.link_permalink);
+        bannedReply(insanity, comment.author.name, comment.subreddit_name_prefixed, comment.permalink);
+    } else if(limitedSubLimitReached(comment)){
+        limitedReply(insanity, comment.author.name, comment.subreddit_name_prefixed, comment.permalink);
     } else {
         comment.reply(insanity + subScript());
     }
@@ -78,6 +86,10 @@ function thesaurize(comment){
         let split = splitPunctuation(word);
         word = split.word;
         punctuation = split.punctuation;
+        if(commonArr.includes(word.toLowerCase())){
+            return constructWord(word, punctuation);
+        }
+        
         let capitalize = word.charAt(0) === word.charAt(0).toUpperCase();
         let allCaps = word === word.toUpperCase();
         if(pluralize.isPlural(word) && !word.includes(`'s`)){
@@ -85,9 +97,7 @@ function thesaurize(comment){
             word = pluralize.singular(word.toLowerCase());
         }
         
-        if(commonArr.includes(word.toLowerCase())){
-            return constructWord(word, punctuation);
-        }
+        
         
         if(word.toLocaleLowerCase() === "trump" || word.toLocaleLowerCase() === "trump's"){
             return constructWord(trump(), punctuation, false, capitalize, allCaps);
@@ -138,12 +148,14 @@ function splitPunctuation(word){
     return returnObj;
 }
 
-function subScript (){
+function subScript(customText){
+    let baseMessage = "^(This is a bot. I try my best, but my best is 80% mediocrity 20% hilarity. Created by OrionSuperman. Check out my best work at /r/ThesaurizeThis)";
+    let message = customText || baseMessage;
     return `
 
 ***
 
-^(This is a bot. I try my best, but my best is 80% mediocrity 20% hilarity. Created by OrionSuperman. Check out my best work at /r/ThesaurizeThis)`;
+${message}`;
 }
 
 function chooseWord(tWordArr){
@@ -156,6 +168,27 @@ function isLetter(c) {
 
 function jsUcfirst(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function inLimitedSubs(subName){
+    let limitedSubs = {
+        "r/testingground4bots": 10,
+        "r/test": 1
+    }
+
+    return limitedSubs[subName];
+}
+
+function limitedSubLimitReached(comment){
+    
+    let subLimit = inLimitedSubs(comment.subreddit_name_prefixed);
+    if(!subLimit){
+        return false;
+    }
+    let submissionID = comment.link_id;
+    limitedPosts[submissionID] = limitedPosts[submissionID] + 1 || 1;
+    
+    return limitedPosts[submissionID] > subLimit;
 }
 
 function inBannedSub(subName){
@@ -233,8 +266,13 @@ function inBannedSub(subName){
 }
 
 function bannedReply(insanity, user, subreddit, commentLink){
-    let appendedResponse = `Paging u/${user}. [You called](${commentLink}), unfortunately I am banned in ${subreddit} so here is your translated text: \n\n ${insanity}`;
-    r.getSubmission('9y3efk').reply(appendedResponse + subScript());
+    let bannedResponse = `Paging u/${user}. [You called](${commentLink}), unfortunately I am banned in ${subreddit} so here is your translated text.`;
+    r.getSubmission('9y3efk').reply(insanity + subScript(bannedResponse));
+}
+
+function limitedReply(insanity, user, subreddit, commentLink){
+    let limitedResponse = `Paging u/${user}. [You called](${commentLink}), but the mods of ${subreddit} have limited the number of times I can be used per post. Here is your translated text.`;
+    r.getSubmission('9y3efk').reply(insanity + subScript(limitedResponse));
 }
 
 function trimLongComment(comment){
