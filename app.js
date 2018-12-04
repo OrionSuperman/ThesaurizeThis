@@ -5,8 +5,8 @@ const Snoostorm = require('snoostorm');
 const thesaurus = require('thesaurus');
 const pluralize = require('pluralize');
 
-const globalCallWord = "!testthesaurizethis";
-const fandango = "!testdothefandango";
+const globalCallWord = "!thesaurizethis";
+const fandango = "!dothefandango";
 const commonArr =["the","of","and","a","to","in","is","you","that","it","he","was","for","on","are","as","with","his","they","I","at","be","this","have","from","or","one","had","by","word","but","not","what","all","were","we","when","your","can","said","there","use","an","each","which","she","do","how","their","if","will","up","about","out","many","then","them","these","so","some","her","would","make","like","him","into","time","has","look","two","more","go","see","no","way","could","my","than","been","call","who","its","now","did","get","come","made","may","part","i","me","his"];
 const limitedPosts = {};
 
@@ -173,7 +173,7 @@ function jsUcfirst(string) {
 function inLimitedSubs(subName){
     let limitedSubs = {
         "r/testingground4bots": 10,
-        "r/test": 1
+        "r/test": 4
     }
 
     return limitedSubs[subName];
