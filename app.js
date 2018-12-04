@@ -172,8 +172,14 @@ function jsUcfirst(string) {
 
 function inLimitedSubs(subName){
     let limitedSubs = {
-        "r/testingground4bots": 10,
-        "r/test": 4
+        "r/test": {
+            "postLimit": 2,
+            "userLimit": 1
+        },
+        "r/copypasta": {
+            "postLimit": 10,
+            "userLimit": 2
+        }
     }
 
     return limitedSubs[subName];
@@ -181,14 +187,15 @@ function inLimitedSubs(subName){
 
 function limitedSubLimitReached(comment){
     
-    let subLimit = inLimitedSubs(comment.subreddit_name_prefixed);
-    if(!subLimit){
+    let subLimitValues = inLimitedSubs(comment.subreddit_name_prefixed);
+    if(!subLimitValues){
         return false;
     }
     let submissionID = comment.link_id;
-    limitedPosts[submissionID] = limitedPosts[submissionID] + 1 || 1;
-    
-    return limitedPosts[submissionID] > subLimit;
+    limitedPosts[submissionID] = limitedPosts[submissionID] || {};
+    limitedPosts[submissionID].postCount = limitedPosts[submissionID].postCount + 1 || 1;
+    limitedPosts[submissionID][comment.author.name] = limitedPosts[submissionID][comment.author.name] + 1 || 1;
+    return !(limitedPosts[submissionID].postCount <= subLimitValues.postLimit && limitedPosts[submissionID][comment.author.name] <= subLimitValues.userLimit);
 }
 
 function inBannedSub(subName){
@@ -272,7 +279,8 @@ function bannedReply(insanity, user, subreddit, commentLink){
 }
 
 function limitedReply(insanity, user, subreddit, commentLink){
-    let limitedResponse = `^(Paging u/${user}. [Thank you for calling](${commentLink}), but the mods of ${subreddit} have requested I limit the number of times I respond per post, so here is your translated text.)`;
+    let subLimits = inLimitedSubs(subreddit);
+    let limitedResponse = `^(Paging u/${user}. [Thank you for calling](${commentLink}). To keep spam down, ${subreddit} mods have requested I limit my responses to ${subLimits.postLimit} per post, ${subLimits.userLimit} per user. But don't fret, you can continue thesaurizing in this post.)`;
     r.getSubmission('9y3efk').reply(insanity + subScript(limitedResponse));
 }
 
