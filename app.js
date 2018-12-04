@@ -266,12 +266,12 @@ function inBannedSub(subName){
 }
 
 function bannedReply(insanity, user, subreddit, commentLink){
-    let bannedResponse = `Paging u/${user}. [You called](${commentLink}), unfortunately I am banned in ${subreddit} so here is your translated text.`;
+    let bannedResponse = `^(Paging u/${user}. [Thank you for calling](${commentLink}), unfortunately I am banned in ${subreddit}, so please enjoy your translated text.)`;
     r.getSubmission('9y3efk').reply(insanity + subScript(bannedResponse));
 }
 
 function limitedReply(insanity, user, subreddit, commentLink){
-    let limitedResponse = `Paging u/${user}. [You called](${commentLink}), but the mods of ${subreddit} have limited the number of times I can be used per post. Here is your translated text.`;
+    let limitedResponse = `^(Paging u/${user}. [Thank you for calling](${commentLink}), but the mods of ${subreddit} have requested I limit the number of times I respond per post, so here is your translated text.)`;
     r.getSubmission('9y3efk').reply(insanity + subScript(limitedResponse));
 }
 
