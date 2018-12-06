@@ -268,7 +268,9 @@ function inBannedSub(subName){
         "r/facepalm",
         "r/learnprogramming",
         "r/fuckthealtright",
-        "r/dataisbeautiful"
+        "r/dataisbeautiful",
+        "r/hmmm",
+        "r/fantheories"
     ];
     
     return bannedSubs.includes(subName.toLowerCase());
