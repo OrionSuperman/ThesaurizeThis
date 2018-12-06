@@ -267,20 +267,21 @@ function inBannedSub(subName){
         "r/choosingbeggars",
         "r/facepalm",
         "r/learnprogramming",
-        "r/fuckthealtright"
+        "r/fuckthealtright",
+        "r/dataisbeautiful"
     ];
     
     return bannedSubs.includes(subName.toLowerCase());
 }
 
 function bannedReply(insanity, user, subreddit, commentLink){
-    let bannedResponse = `^(Paging u/${user}. [Thank you for calling](${commentLink}), unfortunately I am banned in ${subreddit}, so please enjoy your translated text.)`;
+    let bannedResponse = `^Paging ^u/${user}. [^Thank ^you ^for ^calling](${commentLink}), ^unfortunately ^I ^am ^banned ^in ^${subreddit}, ^so ^please ^enjoy ^your ^translated ^text.`;
     r.getSubmission('9y3efk').reply(insanity + subScript(bannedResponse));
 }
 
 function limitedReply(insanity, user, subreddit, commentLink){
     let subLimits = inLimitedSubs(subreddit);
-    let limitedResponse = `^(Paging u/${user}. [Thank you for calling](${commentLink}). To keep spam down, ${subreddit} mods have requested I limit my responses to ${subLimits.postLimit} per post, ${subLimits.userLimit} per user. But don't fret, you can continue thesaurizing in this post.)`;
+    let limitedResponse = `^Paging ^u/${user}. [^Thank ^you ^for ^calling](https://reddit.com${commentLink}). ^To ^keep ^spam ^down, ^${subreddit} ^mods ^have ^requested ^I ^limit ^my ^responses ^to ^${subLimits.postLimit} ^per ^post, ^${subLimits.userLimit} ^per ^user. ^But ^don't ^fret, ^you ^can ^continue ^thesaurizing ^in ^this ^post.`;
     r.getSubmission('9y3efk').reply(insanity + subScript(limitedResponse));
 }
 
