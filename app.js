@@ -270,7 +270,15 @@ function inBannedSub(subName){
         "r/fuckthealtright",
         "r/dataisbeautiful",
         "r/hmmm",
-        "r/fantheories"
+        "r/fantheories",
+        "r/haiku",
+        "r/linux",
+        "r/thathappened",
+        "r/bostonceltics",
+        "r/funny",
+        "r/wowthanksimcured",
+        "r/subredditsastext",
+        "r/motorcycles"
     ];
     
     return bannedSubs.includes(subName.toLowerCase());
