@@ -278,7 +278,19 @@ function inBannedSub(subName){
         "r/funny",
         "r/wowthanksimcured",
         "r/subredditsastext",
-        "r/motorcycles"
+        "r/motorcycles",
+        "r/callofduty",
+        "r/patientgamers",
+        "r/casualchildabuse",
+        "r/goblinslayer",
+        "r/stardustcrusaders",
+        "r/bestoflegaladvice",
+        "r/books",
+        "r/csgo",
+        "r/thedivision",
+        "r/nosleep",
+        "r/soccer",
+        "r/elitedangerous"
     ];
     
     return bannedSubs.includes(subName.toLowerCase());
