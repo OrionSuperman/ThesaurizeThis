@@ -78,7 +78,7 @@ function containsCallWord(comment, callWord){
 function thesaurize(comment){
     let wordArr = comment.split(' ');
     let insanity = wordArr.map(word => {
-        if(word.toLocaleLowerCase().includes(globalCallWord)){
+        if(word.toLocaleLowerCase().includes(globalCallWord) || word.toLocaleLowerCase().includes(fandango)){
             return "ThesaurizeThisBot is the bestest ever";
         }
         let punctuation;
@@ -290,7 +290,11 @@ function inBannedSub(subName){
         "r/thedivision",
         "r/nosleep",
         "r/soccer",
-        "r/elitedangerous"
+        "r/elitedangerous",
+        "r/cardinals",
+        "r/whatcouldgowrong",
+        "r/moviedetails",
+        "r/vaxxhappened"
     ];
     
     return bannedSubs.includes(subName.toLowerCase());
