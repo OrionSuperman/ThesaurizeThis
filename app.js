@@ -294,7 +294,8 @@ function inBannedSub(subName){
         "r/cardinals",
         "r/whatcouldgowrong",
         "r/moviedetails",
-        "r/vaxxhappened"
+        "r/vaxxhappened",
+        "r/spaceengineers"
     ];
     
     return bannedSubs.includes(subName.toLowerCase());
