@@ -295,14 +295,26 @@ function inBannedSub(subName){
         "r/whatcouldgowrong",
         "r/moviedetails",
         "r/vaxxhappened",
-        "r/spaceengineers"
+        "r/spaceengineers",
+        "r/learnjapanese",
+        "r/leagueofmeta",
+        "r/formula1",
+        "r/weekendgunnit",
+        "r/savedyouaclick",
+        "r/atetheonion",
+        "r/minecraft",
+        "r/popheads",
+        "r/chicagobulls",
+        "r/wisconsin",
+        "r/apple"
+        
     ];
     
     return bannedSubs.includes(subName.toLowerCase());
 }
 
 function bannedReply(insanity, user, subreddit, commentLink){
-    let bannedResponse = `^Paging ^u/${user}. [^Thank ^you ^for ^calling](${commentLink}), ^unfortunately ^I ^am ^banned ^in ^${subreddit}, ^so ^please ^enjoy ^your ^translated ^text.`;
+    let bannedResponse = `^Paging ^u/${user}. [^Thank ^you ^for ^calling](${commentLink}), ^unfortunately ^I ^am ^banned ^in ^${subreddit.substring(1, subreddit.length -1)}, ^so ^please ^enjoy ^your ^translated ^text.`;
     r.getSubmission('9y3efk').reply(insanity + subScript(bannedResponse));
 }
 
