@@ -36,6 +36,15 @@ const listener1 = new Snoowrap({
 });
 const listener1client = new Snoostorm(listener1);
 
+const listener2 = new Snoowrap({
+    userAgent: 'thesaurize-this-helper2',
+    clientId: process.env.CLIENT_ID2,
+    clientSecret: process.env.CLIENT_SECRET2,
+    username: process.env.REDDIT_USER,
+    password: process.env.REDDIT_PASS
+});
+const listener2client = new Snoostorm(listener2);
+
 
 
 // Configure options for stream: subreddit & results per query
@@ -59,11 +68,11 @@ comments.on('comment', async (comment) => {
 });
 
 // listener comments
-let listenerComments;
+let listener1Comments;
 
-function offsetListener(arg) {
-    listenerComments = listener1client.CommentStream(streamOpts);
-    listenerComments.on('comment', async (comment) => {
+function offsetListener1() {
+    listener1Comments = listener1client.CommentStream(streamOpts);
+    listener1Comments.on('comment', async (comment) => {
         try{
             await checkComment(comment);
         } catch(err){
@@ -73,7 +82,23 @@ function offsetListener(arg) {
     });
 }
 
-setTimeout(offsetListener, 1250);
+setTimeout(offsetListener1, 833);
+
+let listener2Comments;
+
+function offsetListener2() {
+    listener2Comments = listener2client.CommentStream(streamOpts);
+    listener2Comments.on('comment', async (comment) => {
+        try{
+            await checkComment(comment);
+        } catch(err){
+            console.error(err);
+        }
+
+    });
+}
+
+setTimeout(offsetListener2, 1666);
 
 
 
