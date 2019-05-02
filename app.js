@@ -5,8 +5,8 @@ const Snoostorm = require('snoostorm');
 const thesaurize = require('thesaurize');
 
 
-const thesaurizethis = "!testthesaurizethis";
-const fandango = "!testdothefandango";
+const thesaurizethis = "!thesaurizethis";
+const fandango = "!dothefandango";
 const globalCallWords = [thesaurizethis, fandango];
 
 const loopPrevention = "ThesaurizeThisBot is the bestest ever";
