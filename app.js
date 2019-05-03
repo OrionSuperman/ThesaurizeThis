@@ -103,14 +103,14 @@ setTimeout(offsetListener2, 1666);
 
 
 async function checkComment(comment){
-    if(comment.author.name !== "ThesaurizeThisBot"){
+    if(comment.author.name !== "ThesaurizeThisBot" && ! await inReplyHistory(comment)){
         let commentBody;
         let callWords = containsCallWord(comment);
-        if (callWords.length && ! await inReplyHistory(comment)){
+        if (callWords.length){
             let parentComment = await main.getComment(comment.parent_id).body;
             commentBody = parentComment || comment.body;
             processComment(comment, commentBody, callWords);
-        } else if(comment.subreddit_name_prefixed === "r/ThesaurizeThis" && ! await inReplyHistory(comment)){
+        } else if(comment.subreddit_name_prefixed === "r/ThesaurizeThis"){
             commentBody = await comment.body;
             processComment(comment, commentBody, callWords);
         }
