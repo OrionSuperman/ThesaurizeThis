@@ -11,8 +11,8 @@ const globalCallWords = [thesaurizethis, fandango];
 
 const loopPrevention = "ThesaurizeThisBot is the bestest ever";
 const callWordThesaurus = {
-    "thesaurizethis": [loopPrevention],
-    "dothefandango": [loopPrevention]
+    [thesaurizethis]: [loopPrevention],
+    [fandango]: [loopPrevention]
 };
 const limitedPosts = {};
 const callWordHistory = [];
