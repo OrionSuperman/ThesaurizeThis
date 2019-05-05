@@ -10,11 +10,7 @@
     "pluralize": "^7.0.0",
     "snoostorm": "0.0.5",
     "snoowrap": "^1.15.2",
-<<<<<<< HEAD
     "thesaurize": "^1.0.6",
-=======
-    "thesaurize": "^1.0.1",
->>>>>>> 1a661752b1a3eb1c2c67d575fbaa52450080901c
     "thesaurus": "0.0.0"
   }
 }
