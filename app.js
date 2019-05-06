@@ -334,7 +334,17 @@ function inBannedSub(subName){
         "r/wisconsin",
         "r/apple",
         "r/engrish",
-        "r/insanepeoplefacebook"
+        "r/insanepeoplefacebook",
+        "r/autos",
+        "r/carbage",
+        "r/entitledparents",
+        "r/hockey",
+        "r/nostupidquestions",
+        "r/edmontonoilers",
+        "r/naruto",
+        "r/pitbull",
+        "r/deadbydaylight",
+        "r/wellthatsucks"
     ];
 
     return bannedSubs.includes(subName.toLowerCase());
