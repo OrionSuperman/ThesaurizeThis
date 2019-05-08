@@ -7,7 +7,7 @@ const thesaurize = require('thesaurize');
 
 const thesaurizethis = "!thesaurizethis";
 const fandango = "!dothefandango";
-const globalCallWords = [thesaurizethis, fandango];
+const globalCallWords = [thesaurizethis];
 
 const loopPrevention = "ThesaurizeThisBot is the bestest ever";
 const callWordThesaurus = {
@@ -190,7 +190,11 @@ function limitedReply(insanity, user, subreddit, commentLink){
 }
 
 function containsCallWord(comment){
-    return globalCallWords.filter( callWord => comment.body.toLowerCase().includes(callWord));
+
+    return globalCallWords.filter( callWord => {
+        var re = new RegExp(callWord,"i");
+        return comment.body.match(re);
+    });
 
 }
 
