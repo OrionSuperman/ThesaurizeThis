@@ -54,6 +54,12 @@ const streamOpts = {
     pollTime: 2500
 };
 
+const streamOptsThes = {
+    subreddit: 'ThesaurizeThis',
+    results: 20,
+    pollTime: 2500
+};
+
 // Create a Snoostorm CommentStream with the specified options
 let comments = client.CommentStream(streamOpts);
 
@@ -82,23 +88,18 @@ function offsetListener1() {
     });
 }
 
-setTimeout(offsetListener1, 833);
+setTimeout(offsetListener1, 1500);
 
-let listener2Comments;
+// listener2 is being directed to only monitor /r/ThesaurizeThis to increase catch rate there.
+let listener2Comments = listener2client.CommentStream(streamOptsThes);
+listener2Comments.on('comment', async (comment) => {
+    try{
+        await checkComment(comment);
+    } catch(err){
+        console.error(err);
+    }
 
-function offsetListener2() {
-    listener2Comments = listener2client.CommentStream(streamOpts);
-    listener2Comments.on('comment', async (comment) => {
-        try{
-            await checkComment(comment);
-        } catch(err){
-            console.error(err);
-        }
-
-    });
-}
-
-setTimeout(offsetListener2, 1666);
+});
 
 
 
