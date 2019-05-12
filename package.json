@@ -3,14 +3,20 @@
   "version": "1.0.5",
   "private": true,
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "test": "mocha $(find . -name '*.test.js' ! -ipath '*node_modules*')"
   },
   "dependencies": {
     "dotenv": "^6.1.0",
-    "pluralize": "^7.0.0",
     "snoostorm": "0.0.5",
     "snoowrap": "^1.15.2",
-    "thesaurize": "^1.0.9",
-    "thesaurus": "0.0.0"
+    "thesaurize": "^1.0.10"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^6.1.4",
+    "rewire": "^2.5.2",
+    "sinon": "^4.5.0",
+    "sinon-chai": "^3.3.0"
   }
 }
