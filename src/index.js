@@ -1,6 +1,6 @@
 let thesaurize = require('thesaurize');
 let os = require('os');
-let thesaurizethis = "!testthesaurizethis";
+let thesaurizethis = "!thesaurizethis";
 let fandango = "!dothefandango";
 let globalCallWords = [thesaurizethis];
 let bannedSubs = require("../data/bannedSubs.json");
