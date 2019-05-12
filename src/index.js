@@ -1,6 +1,6 @@
 let thesaurize = require('thesaurize');
-
-let thesaurizethis = "!thesaurizethis";
+let os = require('os');
+let thesaurizethis = "!testthesaurizethis";
 let fandango = "!dothefandango";
 let globalCallWords = [thesaurizethis];
 let bannedSubs = require("../data/bannedSubs.json");
@@ -71,12 +71,15 @@ async function processComment(comment, commentText, callWords){
     } else {
         //comment.reply(insanity + subScript());
         let replyText = insanity + subScript();
-        reply(comment, replyText)
+        commentReply(comment, replyText)
     }
 }
 
-async function reply(comment, reply){
+async function commentReply(comment, reply){
     try{
+        if(comment.author.name === "OrionSuperman"){
+            reply += generateDebug();
+        }
         await comment.reply(reply);
     } catch (err){
         console.error(err);
@@ -152,6 +155,12 @@ function trimLongComment(comment){
         comment = comment.substring(0,9500);
     }
     return comment;
+}
+
+function generateDebug() {
+    cpuCount = os.cpus().length;
+    let minAvg = os.loadavg()[2];
+    return ` ^CPU ^Count: ^${cpuCount}. ^Running ^average ^usage: ^${minAvg}`;
 }
 
 module.exports = checkComment;
