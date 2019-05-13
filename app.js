@@ -43,7 +43,7 @@ const streamOpts = {
 };
 
 const streamOptsThes = {
-    subreddit: 'ThesaurizeThis',
+    subreddit: 'ThesaurizeThis,CopyPasta',
     results: 20,
     pollTime: 2500
 };
