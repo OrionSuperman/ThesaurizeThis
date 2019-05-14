@@ -99,5 +99,122 @@ describe("index.js", () => {
         });
     });
 
+    describe("commentMeetsCriteria()", () => {
+        let commentMeetsCriteria,
+            comment,
+            inCommentHistoryStub;
 
+        beforeEach(() => {
+            commentMeetsCriteria = index.__get__("commentMeetsCriteria");
+            comment = {
+                "author": {
+                    "name": "OrionSuperman"
+                }
+            };
+
+            inCommentHistoryStub = sinon.stub().resolves(false);
+        });
+
+        it("returns true if comment is not authored by the bot, and not in the history", async () => {
+            index.__set__("inCommentHistory", inCommentHistoryStub);
+
+            let result = await commentMeetsCriteria(comment);
+            expect(result).to.eql(true);
+            expect(inCommentHistoryStub).to.have.been.calledWith(comment);
+        });
+
+        it("returns false if comment is made by the bot", async () => {
+            comment.author.name = "ThesaurizeThisBot";
+            index.__set__("inCommentHistory", inCommentHistoryStub);
+
+            let result = await commentMeetsCriteria(comment);
+            expect(result).to.eql(false);
+            expect(inCommentHistoryStub).to.have.not.been.called;
+        });
+
+        it("returns false if comment is in the comment history", async () => {
+            inCommentHistoryStub = sinon.stub().resolves(true)
+            index.__set__("inCommentHistory", inCommentHistoryStub);
+
+            let result = await commentMeetsCriteria(comment);
+            expect(result).to.eql(false);
+            expect(inCommentHistoryStub).to.have.been.calledWith(comment);
+        });
+    });
+
+    describe("containsCallWord()", () => {
+        let containsCallWord,
+            comment,
+            globalCallWords;
+
+        beforeEach(() => {
+            containsCallWord = index.__get__("containsCallWord");
+            comment = {
+                "body": "there is a !PotentialCallWord in this string"
+            };
+        });
+
+        it("returns array of any of the global call words present in the input comment", () => {
+            globalCallWords = ["!NotInThisComment", "!PotentialCallWord"];
+            index.__set__("globalCallWords", globalCallWords);
+
+            let result = containsCallWord(comment);
+
+            expect(result).to.eql([globalCallWords[1]]);
+        });
+
+        it("returns empty array if there are no global call words present", () => {
+            globalCallWords = ["!NotInThisComment", "!AlsoNotInThisComment"];
+            index.__set__("globalCallWords", globalCallWords);
+
+            let result = containsCallWord(comment);
+
+            expect(result).to.eql([]);
+        });
+    });
+
+    describe("processCallWordComment()", () => {
+        let processCallWordComment,
+            comment,
+            replyBotGetCommentStub,
+            replyBotGetCommentReturn,
+            processCommentStub;
+
+        beforeEach(() => {
+            processCallWordComment = index.__get__("processCallWordComment");
+            comment = {
+                "parent_id": "barbosa",
+                "body": "took the black pearl"
+            };
+            
+            processCommentStub = sinon.stub();
+            index.__set__("processComment", processCommentStub);
+        });
+
+        it("uses parent comment body when present", async () => {
+            replyBotGetCommentReturn = {
+                "body": "Jack Sparrow"
+            };
+            replyBotGetCommentStub = sinon.stub().returns(replyBotGetCommentReturn);
+            index.__set__("replyBot", {
+                "getComment": replyBotGetCommentStub
+            });
+
+            await processCallWordComment(comment);
+            expect(replyBotGetCommentStub).to.have.been.calledWith(comment.parent_id);
+            expect(processCommentStub).to.have.been.calledWith(comment, replyBotGetCommentReturn.body)
+        });
+
+        it("uses the comment.body when parent comment is not present", async () => {
+            replyBotGetCommentReturn = {};
+            replyBotGetCommentStub = sinon.stub().returns(replyBotGetCommentReturn);
+            index.__set__("replyBot", {
+                "getComment": replyBotGetCommentStub
+            });
+
+            await processCallWordComment(comment);
+            expect(replyBotGetCommentStub).to.have.been.calledWith(comment.parent_id);
+            expect(processCommentStub).to.have.been.calledWith(comment, comment.body)
+        });
+    });
 });

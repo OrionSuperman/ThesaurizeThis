@@ -12,7 +12,7 @@ let callWordThesaurus = {
 };
 let limitedPosts = {};
 let commentHistory = [];
-let replyBot;
+let replyBot = {};
 
 /**
  * determines if a comment meets the criteria for processing
