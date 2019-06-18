@@ -186,7 +186,7 @@ describe("index.js", () => {
                 "parent_id": "barbosa",
                 "body": "took the black pearl"
             };
-            
+
             processCommentStub = sinon.stub();
             index.__set__("processComment", processCommentStub);
         });

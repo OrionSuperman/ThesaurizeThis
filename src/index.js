@@ -23,12 +23,14 @@ let replyBot = {};
 async function checkComment(comment, listener) {
     replyBot = listener;
     if (await commentMeetsCriteria(comment)) {
-        let callWords = containsCallWord(comment);
-        if (callWords.length) {
-            await processCallWordComment(comment);
-        } else if (comment.subreddit_name_prefixed === "r/ThesaurizeThis") {
+        if (comment.subreddit_name_prefixed === "r/ThesaurizeThis" ||
+            comment.subreddit_name_prefixed === "r/DarkJokes") {
             await processAutoReplyComment(comment);
+        } else if(containsCallWord(comment)){
+            await processCallWordComment(comment);
         }
+
+
     }
 }
 
@@ -161,7 +163,7 @@ async function commentReply(comment, reply) {
 function bannedReply(insanity, user, subreddit, commentLink) {
     let bannedResponse = `^Paging ^u/${user}. [^Thank ^you ^for ^calling](${commentLink}), ^unfortunately ^I ^am ^banned ^in ^${subreddit.substring(1, subreddit.length)}, ^so ^please ^enjoy ^your ^translated ^text.`;
     try {
-        replyBot.getSubmission('9y3efk').reply(trimLongComment(insanity) + subScript(bannedResponse));
+        replyBot.getSubmission('c1v6h8').reply(trimLongComment(insanity) + subScript(bannedResponse));
     } catch (err) {
         console.error(err);
     }

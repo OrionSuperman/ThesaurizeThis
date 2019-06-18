@@ -87,11 +87,3 @@ listener2Comments.on('comment', async (comment) => {
         console.error(err);
     }
 });
-
-setInterval(() => {
-    cpuCount = os.cpus().length;
-    console.log("**************************");
-    console.log(`CPU Count: ${cpuCount}`);
-    console.info(os.loadavg());
-    console.log("**************************");
-}, 10000);
