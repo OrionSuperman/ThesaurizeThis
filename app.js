@@ -75,7 +75,7 @@ setTimeout(offsetListener1, 1500);
 
 // listener2 is being directed to only monitor /r/ThesaurizeThis to increase catch rate there.
 const streamOptsThes = {
-    subreddit: 'ThesaurizeThis,CopyPasta,DarkJokes',
+    subreddit: 'ThesaurizeThis,CopyPasta,darkjokes',
     results: 20,
     pollTime: 2500
 };
