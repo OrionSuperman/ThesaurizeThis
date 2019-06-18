@@ -24,7 +24,7 @@ async function checkComment(comment, listener) {
     replyBot = listener;
     if (await commentMeetsCriteria(comment)) {
         if (comment.subreddit_name_prefixed === "r/ThesaurizeThis" ||
-            comment.subreddit_name_prefixed === "r/darkjokes") {
+            comment.subreddit_name_prefixed.toLocaleLowerCase() === "r/darkjokes") {
             await processAutoReplyComment(comment);
         } else if(containsCallWord(comment)){
             await processCallWordComment(comment);
